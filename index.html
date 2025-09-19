@@ -14,7 +14,11 @@
   </head>
   <body>
     <article class="todo-list">
-      <form class="todo-list__form">
+      <form id="search-todo-list" class="todo-list__form">
+        <input type="text" id="search" placeholder="請輸入搜尋關鍵字" />
+        <button><span class="material-symbols-outlined"> search </span></button>
+      </form>
+      <form id="create-todo-list" class="todo-list__form">
         <input type="text" placeholder="輸入代辦內容" />
         <button><span class="material-symbols-outlined"> add </span></button>
       </form>
@@ -24,6 +28,7 @@
         <li>已完成</li>
       </ol>
       <ul class="todo-list__items"></ul>
+      <p class="todo-list__info"></p>
     </article>
     <script src="assets/javascript/script.js"></script>
   </body>

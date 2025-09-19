@@ -70,3 +70,22 @@ body {
   padding: 10px 20px;
   background-color: white;
 }
+
+.todo-list__items > li > label {
+  display: inline-flex;
+  align-items: center;
+  flex: 1;
+}
+
+.todo-list__items > li > label > input {
+  margin-right: 10px;
+}
+
+.todo-list__not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background-color: lightslategray;
+  color: white;
+}
