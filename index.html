@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript 基礎練習</title>
+  </head>
+  <body>
+    <form id="f"><input id="i" /><button>新增</button></form>
+    <ul id="u"></ul>
+    <script>
+      const f = document.getElementById('f');
+      const i = document.getElementById('i');
+      const u = document.getElementById('u');
+      const data = [];
+
+      const render = () =>
+        (u.innerHTML = data.map((x) => `<li>${x}</li>`).join(''));
+
+      f.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const v = i.value.trim();
+        if (!v) return;
+        data.push(v);
+        i.value = '';
+        render();
+      });
+
+      render();
+    </script>
+  </body>
+</html>
