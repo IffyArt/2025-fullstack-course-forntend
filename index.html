@@ -1,0 +1,54 @@
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>API Demo</title>
+  </head>
+  <body>
+    <script>
+      const BASE = 'https://jsonplaceholder.typicode.com/posts';
+
+      // GET
+      fetch(`http://localhost:8000/api/v1/todo/projects`)
+        .then((r) => r.json())
+        .then(console.log);
+
+      // GET
+      fetch(`${BASE}?_limit=3`)
+        .then((r) => r.json())
+        .then(console.log);
+
+      // POST
+      fetch(BASE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: 'Hello', body: 'content', userId: 1 }),
+      })
+        .then((r) => r.json())
+        .then(console.log);
+
+      // PUT（全量）
+      fetch(`${BASE}/1`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: 1, title: 'New', body: '...', userId: 1 }),
+      })
+        .then((r) => r.json())
+        .then(console.log);
+
+      // PATCH（局部）
+      fetch(`${BASE}/1`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: 'Only Title' }),
+      })
+        .then((r) => r.json())
+        .then(console.log);
+
+      // DELETE
+      fetch(`${BASE}/1`, { method: 'DELETE' })
+        .then((r) => r.json())
+        .then(console.log);
+    </script>
+  </body>
+</html>
