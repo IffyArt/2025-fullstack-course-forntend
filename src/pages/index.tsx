@@ -1,16 +1,15 @@
-import { useUser } from '@/context/UserContext';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function Home() {
-  const { user, setUser } = useUser();
+  const { login, access, refresh, logout } = useAuth();
 
   return (
     <main style={{ padding: '2rem' }}>
-      <h1>🎉 Context Hook 範例</h1>
-      <p>目前使用者：{user?.name}</p>
-
-      <button onClick={() => setUser({ name: '其他人', role: '角色' })}>
-        切換使用者
-      </button>
+      {access ? <p>Logged in</p> : <p>Logged out</p>}
+      <button onClick={() => login('admin', 'admin')}>Login</button>
+      <button onClick={() => logout()}>Logout</button>
+      <p>Access: {access}</p>
+      <p>Refresh: {refresh}</p>
     </main>
   );
 }
