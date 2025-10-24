@@ -1,17 +1,26 @@
-import axios from 'axios';
+import { useAuthJwtCreate } from '@/servers/user-profile';
 import { useState } from 'react';
 
 export const useAuth = () => {
+  const { mutate: authJwtCreate } = useAuthJwtCreate();
+
   const [access, setAccess] = useState<string | null>(null);
   const [refresh, setRefresh] = useState<string | null>(null);
 
   const login = async (username: string, password: string) => {
-    const res = await axios.post('http://localhost:8000/api/auth/jwt/create', {
-      username,
-      password,
-    });
-    setAccess(res.data.access);
-    setRefresh(res.data.refresh);
+    authJwtCreate(
+      { username, password },
+      {
+        onSuccess: (data) => {
+          setAccess(data.access);
+          setRefresh(data.refresh);
+          localStorage.setItem('access', data.access);
+        },
+        onError: (error) => {
+          console.error(error);
+        },
+      },
+    );
   };
 
   const logout = () => {
