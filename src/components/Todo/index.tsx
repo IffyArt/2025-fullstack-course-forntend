@@ -4,6 +4,7 @@ import {
   useTodoProjectCreate,
   useTodoProjectDelete,
   useTodoProjectList,
+  useTodoProjectRetrieve,
   useTodoProjectUpdate,
 } from '@/servers/todo-project';
 import { useState } from 'react';
@@ -18,6 +19,9 @@ const TodoProject = () => {
     isFetching: isFetchingTodoProjectList,
     isPending: isPendingTodoProjectList,
   } = useTodoProjectList();
+  const { data: todoProjectData } = useTodoProjectRetrieve(
+    currentId?.toString() ?? '',
+  );
   const { mutate: createTodoProject } = useTodoProjectCreate();
   const { mutate: updateTodoProject } = useTodoProjectUpdate();
   const { mutate: deleteTodoProject } = useTodoProjectDelete();
@@ -75,6 +79,7 @@ const TodoProject = () => {
                 onSubmit={(data) =>
                   handleUpdateTodoProject(data as TodoProjectType)
                 }
+                resetData={todoProjectData}
               />
             </>
           )}
