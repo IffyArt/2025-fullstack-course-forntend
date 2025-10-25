@@ -1,4 +1,6 @@
-import TodoProject from '@/components/Todo';
+import TodoProject from '@/components/TodoProject';
+import TodoTag from '@/components/TodoTag';
+import TodoTask from '@/components/TodoTask';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function Home() {
@@ -10,6 +12,8 @@ export default function Home() {
       <button onClick={() => login('admin', 'admin')}>Login</button>
       <button onClick={() => logout()}>Logout</button>
       <TodoProject />
+      <TodoTag />
+      <TodoTask />
     </main>
   );
 }

@@ -1,11 +1,13 @@
 import { FormField } from '@/models/form-field';
 import { UseFormReturn } from 'react-hook-form';
+import { QueryCheckboxes } from './src/QueryCheckboxes';
+import { QuerySelect } from './src/QuerySelect';
 
-type Props = {
+export type FieldProps = {
   field: FormField;
   methods: UseFormReturn<Record<string, unknown>>;
 };
-export const TextField = ({ field, methods }: Props) => {
+export const TextField = ({ field, methods }: FieldProps) => {
   const { label, name, type } = field;
   const {
     register,
@@ -62,6 +64,17 @@ export const TextField = ({ field, methods }: Props) => {
           {errors[name] && <p>{errors[name]?.message}</p>}
         </section>
       );
+    case 'date':
+      return (
+        <section>
+          <label htmlFor={name}>{label}</label>
+          <input
+            type='date'
+            {...register(name, { required: field.required })}
+          />
+          {errors[name] && <p>{errors[name]?.message}</p>}
+        </section>
+      );
     case 'select':
       return (
         <section>
@@ -87,6 +100,11 @@ export const TextField = ({ field, methods }: Props) => {
           />
         </section>
       );
+
+    case 'query-select':
+      return <QuerySelect field={field} methods={methods} />;
+    case 'query-checkboxes':
+      return <QueryCheckboxes field={field} methods={methods} />;
     default:
       return null;
   }

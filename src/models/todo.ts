@@ -1,8 +1,8 @@
 export enum Priority {
-  LOW = 'Low',
-  MEDIUM = 'Medium',
-  HIGH = 'High',
-  URGENT = 'Urgent',
+  LOW = 'low',
+  MEDIUM = 'medium',
+  HIGH = 'high',
+  URGENT = 'urgent',
 }
 
 export type TodoProjectType = {

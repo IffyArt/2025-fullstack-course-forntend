@@ -1,5 +1,7 @@
 import { FormField } from '@/models/form-field';
 import { Priority } from '@/models/todo';
+import { useTodoProjectList } from '@/servers/todo-project';
+import { useTodoTagsList } from '@/servers/todo-tags';
 
 export const todoProjectFieldConfig: FormField[] = [
   {
@@ -57,12 +59,20 @@ export const todoTaskFieldConfig: FormField[] = [
   {
     label: '截止日期',
     name: 'due_date',
-    type: 'text',
+    type: 'date',
   },
   {
-    label: '專案ID',
+    label: '專案名稱',
     name: 'project_id',
-    type: 'number',
+    type: 'query-select',
     required: true,
+    query: useTodoProjectList,
+  },
+  {
+    label: '標籤項目',
+    name: 'tag_ids',
+    type: 'query-checkboxes',
+    required: true,
+    query: useTodoTagsList,
   },
 ];
