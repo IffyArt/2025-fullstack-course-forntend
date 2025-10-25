@@ -1,4 +1,4 @@
-import { useAuthJwtCreate } from '@/servers/user-profile';
+import { useAuthJwtCreate } from '@/servers/auth';
 import { useState } from 'react';
 
 export const useAuth = () => {
