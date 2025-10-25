@@ -1,10 +1,6 @@
 import { apiClient } from '@/helper/api-client';
+import { AuthJwtCreateParams, AuthJwtCreateResponse } from '@/models/auth';
 import { useMutation } from '@tanstack/react-query';
-
-type AuthJwtCreateParams = {
-  username: string;
-  password: string;
-};
 
 export const useAuthJwtCreate = () => {
   return useMutation({
@@ -13,7 +9,7 @@ export const useAuthJwtCreate = () => {
         username,
         password,
       });
-      return data;
+      return data as AuthJwtCreateResponse;
     },
   });
 };
