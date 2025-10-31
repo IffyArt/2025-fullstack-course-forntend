@@ -87,10 +87,6 @@ src/
 │       ├── index.ts         # 主題系統整合
 │       ├── colors.ts        # 自定義顏色定義
 │       └── layer-styles.ts  # Layer Styles 定義
-│
-├── hooks/                   # 自定義 Hooks（待建立）
-├── utils/                   # 工具函數（待建立）
-└── types/                   # TypeScript 型別定義（待建立）
 ```
 
 ### 🔧 開發特性
