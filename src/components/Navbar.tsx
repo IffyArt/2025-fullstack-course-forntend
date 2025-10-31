@@ -14,6 +14,8 @@ const Navbar = () => {
       _dark={{ bg: 'gray.800', borderColor: 'gray.700' }}
       px={4}
       py={3}
+      // 在 md 以上顯示，在 base 以下隱藏
+      display={{ base: 'none', md: 'block' }}
     >
       <Flex
         maxW='container.xl'
