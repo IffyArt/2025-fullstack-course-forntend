@@ -1,193 +1,340 @@
 # 2025 全端開發課程 - 前端專案
 
-這是一個基於 [Next.js](https://nextjs.org) 的全端開發課程前端專案，使用 TypeScript 和現代化的 React 開發工具。
+<div align="center">
 
-## 專案架構
+**整合 Chakra UI 的 Next.js 專案起始模板**
 
-### 技術棧
+[![Next.js](https://img.shields.io/badge/Next.js-16.0.0-black?logo=next.js)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?logo=typescript)](https://www.typescriptlang.org)
+[![Chakra UI](https://img.shields.io/badge/Chakra_UI-3.28.0-319795?logo=chakra-ui)](https://chakra-ui.com)
+[![React](https://img.shields.io/badge/React-19.2.0-61DAFB?logo=react)](https://react.dev)
 
-- **框架**: Next.js 16.0.0 (Pages Router)
-- **語言**: TypeScript 5
-- **UI 框架**: Chakra UI 3.28.0
-- **UI 庫**: React 19.2.0
-- **樣式引擎**: Emotion 11.14.0
-- **主題管理**: next-themes 0.4.6
-- **圖標庫**: react-icons 5.5.0
+[功能特色](#-核心功能) • [快速開始](#-快速開始) • [開發指南](#-開發指南) • [部署](#-部署)
 
-### 專案結構
+</div>
+
+---
+
+## 📖 專案簡介
+
+這是一個現代化的前端專案，整合了 Next.js、TypeScript 和 Chakra UI，提供完整的開發基礎設施。專案已預先配置好深色模式、自定義主題系統和常用開發工具，讓你可以立即開始建立應用程式。
+
+### ✨ 主要特點
+
+- **🎨 開箱即用的 UI 系統** - Chakra UI v3 完整整合，包含自定義主題配置
+- **🌓 深色模式支援** - 使用 next-themes 實作，支援系統主題偵測和持久化
+- **🔒 完整型別安全** - 100% TypeScript，所有組件都有完整型別定義
+- **⚡ 現代化開發體驗** - 熱重載、路徑別名、ESLint 配置
+- **📦 元件化設計** - 可重用的 UI 組件和完善的專案結構
+
+---
+
+## 🛠️ 技術棧
+
+### 核心技術
+
+| 技術            | 版本    | 說明                          |
+| --------------- | ------- | ----------------------------- |
+| **Next.js**     | 16.0.0  | React 框架，使用 Pages Router |
+| **React**       | 19.2.0  | UI 函式庫                     |
+| **TypeScript**  | 5.x     | 型別安全的 JavaScript 超集    |
+| **Chakra UI**   | 3.28.0  | Component-based UI 框架       |
+| **Emotion**     | 11.14.0 | CSS-in-JS 樣式引擎            |
+| **next-themes** | 0.4.6   | 深色模式管理                  |
+| **react-icons** | 5.5.0   | 圖標庫                        |
+
+### 開發工具
+
+- **ESLint** - 程式碼品質檢查
+- **Webpack** - 建置工具（Chakra UI v3 要求）
+
+---
+
+## ✨ 核心功能
+
+### 🎨 Chakra UI 整合
+
+- ✅ 預先配置 ChakraProvider
+- ✅ 自定義主題系統（System Config）
+- ✅ 可擴展的顏色色票（Color Tokens）
+- ✅ Layer Styles 樣式系統
+- ✅ 完整的組件庫支援
+
+### 🌓 深色模式
+
+- ✅ 亮色/深色模式無縫切換
+- ✅ 使用 next-themes 管理主題
+- ✅ LocalStorage 持久化
+- ✅ 系統主題偵測
+- ✅ 無 Hydration 錯誤
+
+### 📁 專案結構
 
 ```
 src/
-├── pages/                 # Next.js 頁面路由
-│   ├── _app.tsx          # 應用程式根組件 (包含 Chakra UI Provider)
-│   ├── _document.tsx     # HTML 文檔結構
-│   └── index.tsx         # 首頁
-├── components/           # React 組件
-│   └── ui/               # Chakra UI 組件
-│       ├── provider.tsx  # Chakra Provider 配置
-│       └── color-mode.tsx # 深色模式組件
-├── fixtures/             # 配置和固定資料
-│   └── theme/            # Chakra UI 主題配置
-│       ├── index.ts      # 自定義系統配置
-│       ├── colors.ts     # 顏色配置
-│       └── layer-styles.ts # 圖層樣式配置
-└── ...                   # 其他源碼目錄
+├── pages/                    # Next.js 頁面路由
+│   ├── _app.tsx             # 應用程式根組件（全局 Provider）
+│   ├── _document.tsx        # HTML 文檔結構
+│   └── index.tsx            # 首頁範例
+│
+├── components/              # React 組件
+│   └── ui/                  # Chakra UI 相關組件
+│       ├── provider.tsx     # ChakraProvider 配置
+│       └── color-mode.tsx   # 深色模式組件和 Hooks
+│
+├── fixtures/                # 配置和固定資料
+│   └── theme/               # Chakra UI 主題配置
+│       ├── index.ts         # 主題系統整合
+│       ├── colors.ts        # 自定義顏色定義
+│       └── layer-styles.ts  # Layer Styles 定義
+│
+├── hooks/                   # 自定義 Hooks（待建立）
+├── utils/                   # 工具函數（待建立）
+└── types/                   # TypeScript 型別定義（待建立）
 ```
 
-### 核心功能
+### 🔧 開發特性
 
-- **Chakra UI 整合**: 已配置自定義主題系統和 Provider
-- **深色模式支援**: 完整的亮色/深色模式切換功能
-- **自定義主題**: 可擴展的顏色、圖層樣式配置
-- **TypeScript 支援**: 完整的型別檢查和路徑別名 (`@/*`)
-- **現代化 UI**: 使用 Chakra UI v3 建構美觀的使用者介面
+- ✅ **路徑別名**：使用 `@/*` 引用 `src/` 目錄
+- ✅ **熱重載**：開發時即時更新
+- ✅ **型別檢查**：完整的 TypeScript 支援
+- ✅ **ESLint**：程式碼品質檢查
+- ✅ **Pages Router**：簡單直觀的路由系統
 
-## 開始使用
+---
 
-### 安裝依賴
+## 🚀 快速開始
+
+### 1️⃣ 克隆專案（或使用現有專案）
+
+```bash
+git clone <repository-url>
+cd 2025-fullstack-course-forntend
+```
+
+### 2️⃣ 安裝依賴
 
 ```bash
 npm install
 ```
 
-### 開發伺服器
+### 3️⃣ 啟動開發伺服器
 
 ```bash
 npm run dev
 ```
 
-開啟 [http://localhost:3000](http://localhost:3000) 查看結果。
+開啟瀏覽器前往 [http://localhost:3000](http://localhost:3000) 查看結果。
 
-### 建置專案
+你應該會看到：
+
+- ☀️/🌙 深色模式切換按鈕
+- 一個藍色按鈕（使用自定義色票）
+
+### 4️⃣ 開始開發
+
+修改 `src/pages/index.tsx` 開始建立你的應用！
+
+### 📦 可用指令
 
 ```bash
+# 開發模式
+npm run dev
+
+# 建置專案
 npm run build
+
+# 啟動正式伺服器
 npm start
-```
 
-### 程式碼檢查
-
-```bash
+# 程式碼檢查
 npm run lint
 ```
 
-## 開發指南
+---
+
+## 💻 開發指南
 
 ### 頁面開發
 
-- 在 `src/pages/` 目錄下建立新的 `.tsx` 檔案來新增頁面
-- 使用 `@/` 路徑別名來引用 `src/` 目錄下的檔案
-- 所有頁面都會自動獲得 Chakra UI Provider 的功能
-- 可直接使用 Chakra UI 組件建構介面
+在 `src/pages/` 目錄下建立 `.tsx` 檔案來新增頁面：
 
-### 主題客製化
+```typescript
+// src/pages/about.tsx
+import { Box, Container, Heading } from '@chakra-ui/react';
 
-- 在 `src/fixtures/theme/` 目錄下編輯主題配置
-- `colors.ts`: 定義自定義顏色色票
-- `layer-styles.ts`: 定義可重用的圖層樣式
-- `index.ts`: 整合並導出自定義系統配置
+export default function About() {
+  return (
+    <Container maxW='container.xl' py={8}>
+      <Heading>關於頁面</Heading>
+      <Box mt={4}>頁面內容...</Box>
+    </Container>
+  );
+}
+```
 
-### UI 組件
+所有頁面自動獲得：
 
-- 在 `src/components/ui/` 目錄下存放 Chakra UI 相關組件
-- `provider.tsx`: Chakra UI Provider 配置
-- `color-mode.tsx`: 深色模式切換功能
+- Chakra UI Provider 功能
+- 深色模式支援
+- TypeScript 型別檢查
+- 路徑別名 `@/*` 引用
 
-### API 路由
+### 自定義主題
 
-- 在 `src/pages/api/` 目錄下建立 API 路由
-- 檔案會自動對應到 `/api/*` 路徑
+#### 新增顏色
 
-## 專案特色
+編輯 `src/fixtures/theme/colors.ts`：
 
-- **現代化開發體驗**: TypeScript + ESLint + Chakra UI
-- **完整主題系統**: 自定義顏色、樣式和設計系統
-- **深色模式**: 內建亮色/深色模式切換
-- **型別安全**: 完整的 TypeScript 支援
-- **開發工具**: 熱重載和快速刷新
-- **元件化設計**: 使用 Chakra UI 組件快速建構介面
+```typescript
+const colors = {
+  blue: {
+    // 現有顏色...
+  },
+  green: {
+    500: { value: '#10b981' },
+    600: { value: '#059669' },
+  },
+};
+```
 
-## 📚 教學資源
+使用：
 
-本專案提供完整的教學文件，適合初學者和教學使用：
+```typescript
+<Button colorPalette='green'>綠色按鈕</Button>
+```
 
-### [📖 TUTORIAL.md](./TUTORIAL.md)
+#### 新增 Layer Styles
 
-**完整的逐步教學指南**
+編輯 `src/fixtures/theme/layer-styles.ts`：
 
-- 從零開始建立專案
-- 詳細的設定步驟
-- 每個檔案的建立和說明
-- 常見問題與解決方案
-- 進階擴展範例
+```typescript
+const layerStyles = defineLayerStyles({
+  card: {
+    description: '卡片樣式',
+    value: {
+      padding: '6',
+      borderRadius: 'lg',
+      boxShadow: 'md',
+      bg: 'white',
+      _dark: { bg: 'gray.800' },
+    },
+  },
+});
+```
 
-**適合對象**：第一次接觸 Next.js 或 Chakra UI 的學生
+使用：
 
-### [📋 COURSE-OUTLINE.md](./COURSE-OUTLINE.md)
+```typescript
+<Box layerStyle='card'>卡片內容</Box>
+```
 
-**課程規劃與教學大綱**
+### 建立組件
 
-- 4-6 小時完整課程規劃
-- 7 個階段的學習路徑
-- 每階段的學習目標和內容
-- 實作練習和作業安排
-- 評量方式和評估指標
-- 授課建議和教學方法
+在 `src/components/` 目錄下建立可重用組件：
 
-**適合對象**：授課教師和課程規劃者
+```typescript
+// src/components/Card.tsx
+import { Box, BoxProps } from '@chakra-ui/react';
 
-### [⚡ QUICK-REFERENCE.md](./QUICK-REFERENCE.md)
+interface CardProps extends BoxProps {
+  title: string;
+}
 
-**快速參考指南**
+export function Card({ title, children, ...rest }: CardProps) {
+  return (
+    <Box layerStyle='card' {...rest}>
+      <h3>{title}</h3>
+      {children}
+    </Box>
+  );
+}
+```
 
-- 常用指令速查
-- TypeScript 型別範例
-- Chakra UI 組件語法
-- 常用程式碼片段
-- 除錯技巧
-- 實用工具連結
+### 使用深色模式
 
-**適合對象**：需要快速查詢語法的開發者
+```typescript
+import { useColorMode, useColorModeValue } from '@/components/ui/color-mode';
 
-### [💪 EXERCISES.md](./EXERCISES.md)
+function MyComponent() {
+  const { colorMode, toggleColorMode } = useColorMode();
+  const bg = useColorModeValue('white', 'gray.800');
 
-**實作練習題目**
-
-- 8 個漸進式練習（簡單到困難）
-- 個人簡介卡片、導航列、專案展示等
-- 每題包含目標、需求、提示、檢查清單
-- 最終專案：完整的個人作品集網站
-- 延伸挑戰題
-
-**適合對象**：想要實際動手練習的學生
+  return (
+    <Box bg={bg}>
+      <Button onClick={toggleColorMode}>
+        切換至 {colorMode === 'light' ? '深色' : '淺色'} 模式
+      </Button>
+    </Box>
+  );
+}
+```
 
 ---
 
-## 快速開始
+## 📚 參考資源
 
-### 對於學生
+本專案包含詳細的教學文件，可查閱：
 
-1. 📖 先閱讀 [TUTORIAL.md](./TUTORIAL.md) 了解如何從零建立專案
-2. ⚡ 開發時使用 [QUICK-REFERENCE.md](./QUICK-REFERENCE.md) 查詢語法
-3. 💪 完成 [EXERCISES.md](./EXERCISES.md) 中的練習題
-4. 🚀 建立你的個人作品集專案
+- **TUTORIAL.md** - 完整的從零建立教學
+- **QUICK-REFERENCE.md** - 常用語法速查表
+- **EXERCISES.md** - 實作練習題目
 
-### 對於教師
+### 官方文檔
 
-1. 📋 參考 [COURSE-OUTLINE.md](./COURSE-OUTLINE.md) 規劃課程
-2. 📖 使用 [TUTORIAL.md](./TUTORIAL.md) 作為教學內容
-3. 💪 指派 [EXERCISES.md](./EXERCISES.md) 作為課堂練習和作業
-4. ⚡ 提供 [QUICK-REFERENCE.md](./QUICK-REFERENCE.md) 給學生參考
+- [Next.js 文檔](https://nextjs.org/docs) - Next.js 功能和 API
+- [Chakra UI 文檔](https://www.chakra-ui.com/docs) - Chakra UI 組件庫
+- [TypeScript 手冊](https://www.typescriptlang.org/docs/) - TypeScript 語法
+- [React 文檔](https://react.dev/) - React 核心概念
 
-## 學習資源
+---
 
-- [Next.js 文檔](https://nextjs.org/docs) - 學習 Next.js 功能和 API
-- [Chakra UI 文檔](https://www.chakra-ui.com/docs) - 學習 Chakra UI 組件和主題系統
-- [TypeScript 手冊](https://www.typescriptlang.org/docs/) - 學習 TypeScript
-- [Emotion 文檔](https://emotion.sh/docs/introduction) - 學習 CSS-in-JS 樣式處理
+## 🚀 部署
 
-## 部署
+### Vercel（推薦）
 
-最簡單的部署方式是使用 [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)。
+最簡單的部署方式是使用 [Vercel Platform](https://vercel.com/new)：
+
+1. 將專案推送到 GitHub
+2. 在 Vercel 中匯入專案
+3. Vercel 會自動偵測 Next.js 並設定建置配置
+4. 點擊 Deploy
+
+### 其他平台
+
+- **Netlify** - 支援 Next.js，需要配置建置設定
+- **AWS Amplify** - 完整的雲端部署方案
+- **Docker** - 使用容器化部署
 
 查看 [Next.js 部署文檔](https://nextjs.org/docs/pages/building-your-application/deploying) 了解更多詳情。
+
+---
+
+## 🤝 貢獻
+
+歡迎提出問題和改進建議！如果你發現任何問題或有新的功能想法：
+
+1. Fork 本專案
+2. 建立新的分支（`git checkout -b feature/amazing-feature`）
+3. 提交變更（`git commit -m 'Add some amazing feature'`）
+4. 推送到分支（`git push origin feature/amazing-feature`）
+5. 開啟 Pull Request
+
+---
+
+## 📝 授權
+
+本專案採用 MIT 授權 - 詳見 [LICENSE](LICENSE) 檔案
+
+---
+
+## 💬 聯絡
+
+如有任何問題或建議，歡迎透過以下方式聯繫：
+
+- 建立 [Issue](../../issues)
+- 提交 [Pull Request](../../pulls)
+
+---
+
+**Happy Coding! 🎉**
