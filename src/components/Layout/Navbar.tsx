@@ -1,28 +1,26 @@
 import { ColorModeButton } from '@/components/ui/color-mode';
+import { useAuthContext } from '@/context/AuthContext';
 import { Box, Button, Flex, HStack } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 const Navbar = () => {
   const router = useRouter();
+  const { logout } = useAuthContext();
+
+  const handleLogout = () => {
+    logout();
+  };
 
   return (
     <Box
       as='nav'
-      bg='white'
       borderBottom='1px'
-      borderColor='gray.200'
-      _dark={{ bg: 'gray.800', borderColor: 'gray.700' }}
+      bgColor='gray.200'
+      _dark={{ borderColor: 'gray.700' }}
       px={4}
       py={3}
-      // 在 md 以上顯示，在 base 以下隱藏
-      display={{ base: 'none', md: 'block' }}
     >
-      <Flex
-        maxW='container.xl'
-        mx='auto'
-        justify='space-between'
-        align='center'
-      >
+      <Flex maxW='1200px' mx='auto' justify='space-between' align='center'>
         <Box fontWeight='bold' fontSize='xl'>
           Logo
         </Box>
@@ -31,8 +29,8 @@ const Navbar = () => {
           <Button variant='ghost' onClick={() => router.push('/')}>
             首頁
           </Button>
-          <Button variant='ghost' onClick={() => router.push('/about')}>
-            關於
+          <Button variant='ghost' onClick={handleLogout}>
+            登出
           </Button>
           <ColorModeButton />
         </HStack>

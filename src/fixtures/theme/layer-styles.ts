@@ -9,10 +9,17 @@ const layerStyles = defineLayerStyles({
       borderColor: 'gray.200',
     },
   },
+  'border-solid-all': {
+    description: 'border solid',
+    value: {
+      border: '1px solid',
+      borderColor: 'gray.200',
+    },
+  },
   'card-elevated': {
     description: '卡片樣式',
     value: {
-      padding: '4',
+      padding: '8',
       borderRadius: 'md',
       boxShadow: 'lg',
       bg: 'white',

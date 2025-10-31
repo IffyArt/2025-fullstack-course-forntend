@@ -1,14 +1,15 @@
 import FieldCase from '@/components/FieldCase';
 import { LoadingLayout } from '@/components/LoadingLayout';
 import { toaster } from '@/components/ui/toaster';
-import { todoProjectFieldConfig } from '@/fixtures/form-config/todo-field-config';
+import { todoTaskFieldConfig } from '@/fixtures/form-config/todo-field-config';
 import {
-  useTodoProjectCreate,
-  useTodoProjectDelete,
-  useTodoProjectList,
-} from '@/servers/todo-project';
+  useTodoTaskCreate,
+  useTodoTaskDelete,
+  useTodoTaskList,
+} from '@/servers/todo-task';
 import {
   Badge,
+  Box,
   Button,
   CloseButton,
   Dialog,
@@ -26,35 +27,35 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { CiLock } from 'react-icons/ci';
-import { FaEdit, FaPlus, FaTags, FaTrash } from 'react-icons/fa';
-import { GrView } from 'react-icons/gr';
-import { MdOutlinePublic } from 'react-icons/md';
+import { FaCheck, FaHome, FaPlus, FaTrash } from 'react-icons/fa';
 
-export default function Home() {
+const TaskListPage = () => {
+  const router = useRouter();
   const methods = useForm();
 
   const [modalOpen, setModalOpen] = useState(false);
 
+  const { id } = router.query;
+
   const {
-    data: projects,
-    refetch: refetchProjects,
-    isLoading: isProjectsLoading,
-    isPending: isProjectsPending,
-  } = useTodoProjectList();
+    data: tasks,
+    isLoading: isTasksLoading,
+    isPending: isTasksPending,
+    refetch: refetchTasks,
+  } = useTodoTaskList(id as string);
+  const { mutate: createTask } = useTodoTaskCreate();
+  const { mutate: deleteTask } = useTodoTaskDelete();
 
-  const { mutate: createProject } = useTodoProjectCreate();
-  const { mutate: deleteProject } = useTodoProjectDelete();
-
-  const handleDeleteProject = (projectId: number) => {
-    deleteProject(projectId.toString(), {
+  const handleDeleteTask = (taskId: number) => {
+    deleteTask(taskId.toString(), {
       onSuccess: () => {
-        refetchProjects();
+        refetchTasks();
         toaster.create({
-          title: '專案刪除成功',
-          description: '專案刪除成功',
+          title: '任務刪除成功',
+          description: '任務刪除成功',
           type: 'success',
         });
       },
@@ -63,37 +64,39 @@ export default function Home() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = methods.handleSubmit((data: any) => {
-    createProject(data, {
-      onSuccess: () => {
-        refetchProjects();
-        setModalOpen(false);
-        toaster.create({
-          title: '專案新增成功',
-          description: '專案新增成功',
-          type: 'success',
-        });
+    createTask(
+      { ...data, project_id: id },
+      {
+        onSuccess: () => {
+          refetchTasks();
+          setModalOpen(false);
+          toaster.create({
+            title: '任務新增成功',
+            description: '任務新增成功',
+            type: 'success',
+          });
+        },
       },
-    });
+    );
   });
-
   return (
     <>
       <Flex justifyContent='space-between' alignItems='center'>
         <Heading as='h1' size='3xl' mb='20px' mt='20px'>
-          TODO LIST - 專案列表
+          TODO LIST - 任務列表
         </Heading>
 
         <Stack direction='row' gap='2'>
-          <Link href='/todo-list/tags'>
-            <Button variant='outline' colorPalette='blue'>
-              <Icon as={FaTags} />
-              標籤管理
-            </Button>
-          </Link>
           <Button colorPalette='blue' onClick={() => setModalOpen(true)}>
             <Icon as={FaPlus} />
-            新增專案
+            新增任務
           </Button>
+          <Link href='/'>
+            <Button variant='outline' colorPalette='blue'>
+              <Icon as={FaHome} />
+              返回專案列表
+            </Button>
+          </Link>
         </Stack>
       </Flex>
 
@@ -107,15 +110,13 @@ export default function Home() {
           <Dialog.Positioner>
             <Dialog.Content as='form' onSubmit={onSubmit}>
               <Dialog.Header>
-                <Dialog.Title>新增專案</Dialog.Title>
+                <Dialog.Title>新增任務</Dialog.Title>
               </Dialog.Header>
               <FormProvider {...methods}>
                 <Dialog.Body layerStyle='border-solid-top' p='6'>
-                  <LoadingLayout
-                    isLoading={isProjectsPending || isProjectsLoading}
-                  >
+                  <LoadingLayout isLoading={isTasksPending || isTasksLoading}>
                     <VStack gap='4'>
-                      {todoProjectFieldConfig.map((field) => (
+                      {todoTaskFieldConfig.map((field) => (
                         <FieldCase key={field.name} field={field} />
                       ))}
                     </VStack>
@@ -141,7 +142,7 @@ export default function Home() {
         </Portal>
       </Dialog.Root>
 
-      <LoadingLayout isLoading={isProjectsPending || isProjectsLoading}>
+      <LoadingLayout isLoading={isTasksPending || isTasksLoading}>
         <Grid
           templateColumns={{
             base: 'repeat(1, 1fr)',
@@ -150,19 +151,27 @@ export default function Home() {
           }}
           gap='20px'
         >
-          <For each={projects?.results}>
-            {(project) => (
-              <GridItem key={project.id} layerStyle='border-solid-all'>
+          <For each={tasks?.results}>
+            {(task) => (
+              <GridItem key={task.id} layerStyle='border-solid-all'>
                 <Heading as='h2' size='2xl' p='4'>
-                  {project.is_public ? (
+                  {task.title}
+                </Heading>
+                <Box p='4' pt='0'>
+                  <Text>{task.description}</Text>
+                  <Text>{task.priority}</Text>
+                  <Text>{new Date(task.due_date).toLocaleDateString()}</Text>
+                </Box>
+                <HStack layerStyle='border-solid-top' p='2'>
+                  {task.is_completed ? (
                     <Badge
                       variant='surface'
                       colorPalette='blue'
                       size='lg'
                       mr='10px'
                     >
-                      <MdOutlinePublic />
-                      公開
+                      完成
+                      <Icon as={FaCheck} />
                     </Badge>
                   ) : (
                     <Badge
@@ -171,30 +180,9 @@ export default function Home() {
                       size='lg'
                       mr='10px'
                     >
-                      <CiLock />
-                      私有
+                      進行中
                     </Badge>
                   )}
-
-                  {project.name}
-                </Heading>
-
-                <HStack layerStyle='border-solid-top' p='2'>
-                  <Link
-                    href={`/todo-list/project/${project.id}/tasks`}
-                    style={{ flex: 1 }}
-                  >
-                    <Button variant='outline' colorPalette='cyan' w='100%'>
-                      <Icon as={GrView} />
-                      查看任務列表
-                    </Button>
-                  </Link>
-                  <Link href={`/todo-list/project/${project.id}/edit`}>
-                    <Button variant='ghost' colorPalette='blue'>
-                      <Icon as={FaEdit} />
-                      編輯
-                    </Button>
-                  </Link>
                   <Popover.Root>
                     <Popover.Trigger asChild>
                       <Button variant='ghost' colorPalette='red'>
@@ -217,7 +205,7 @@ export default function Home() {
                               <Button
                                 variant='ghost'
                                 colorPalette='red'
-                                onClick={() => handleDeleteProject(project.id)}
+                                onClick={() => handleDeleteTask(task.id)}
                               >
                                 確定
                               </Button>
@@ -235,4 +223,6 @@ export default function Home() {
       </LoadingLayout>
     </>
   );
-}
+};
+
+export default TaskListPage;

@@ -1,57 +1,50 @@
 import FieldCase from '@/components/FieldCase';
 import { LoadingLayout } from '@/components/LoadingLayout';
 import { toaster } from '@/components/ui/toaster';
-import { todoProjectFieldConfig } from '@/fixtures/form-config/todo-field-config';
+import { todoTagFieldConfig } from '@/fixtures/form-config/todo-field-config';
 import {
-  useTodoProjectCreate,
-  useTodoProjectDelete,
-  useTodoProjectList,
-} from '@/servers/todo-project';
+  useTodoTagsCreate,
+  useTodoTagsDelete,
+  useTodoTagsList,
+} from '@/servers/todo-tags';
 import {
-  Badge,
   Button,
   CloseButton,
   Dialog,
   Flex,
-  For,
-  Grid,
-  GridItem,
   Heading,
-  HStack,
   Icon,
   Popover,
   Portal,
   Stack,
+  Table,
   Text,
   VStack,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { CiLock } from 'react-icons/ci';
-import { FaEdit, FaPlus, FaTags, FaTrash } from 'react-icons/fa';
-import { GrView } from 'react-icons/gr';
-import { MdOutlinePublic } from 'react-icons/md';
+import { FaEdit, FaHome, FaPlus, FaTrash } from 'react-icons/fa';
 
-export default function Home() {
+const TagsPage = () => {
   const methods = useForm();
 
   const [modalOpen, setModalOpen] = useState(false);
 
   const {
-    data: projects,
-    refetch: refetchProjects,
-    isLoading: isProjectsLoading,
-    isPending: isProjectsPending,
-  } = useTodoProjectList();
+    data,
+    isLoading: isTagsLoading,
+    isPending: isTagsPending,
+    refetch: refetchTags,
+  } = useTodoTagsList();
 
-  const { mutate: createProject } = useTodoProjectCreate();
-  const { mutate: deleteProject } = useTodoProjectDelete();
+  const { mutate: createTag } = useTodoTagsCreate();
+  const { mutate: deleteTag } = useTodoTagsDelete();
 
-  const handleDeleteProject = (projectId: number) => {
-    deleteProject(projectId.toString(), {
+  const handleDeleteTag = (tagId: number) => {
+    deleteTag(tagId.toString(), {
       onSuccess: () => {
-        refetchProjects();
+        refetchTags();
         toaster.create({
           title: '專案刪除成功',
           description: '專案刪除成功',
@@ -63,13 +56,13 @@ export default function Home() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = methods.handleSubmit((data: any) => {
-    createProject(data, {
+    createTag(data, {
       onSuccess: () => {
-        refetchProjects();
+        refetchTags();
         setModalOpen(false);
         toaster.create({
-          title: '專案新增成功',
-          description: '專案新增成功',
+          title: '標籤新增成功',
+          description: '標籤新增成功',
           type: 'success',
         });
       },
@@ -77,23 +70,23 @@ export default function Home() {
   });
 
   return (
-    <>
+    <LoadingLayout isLoading={isTagsLoading || isTagsPending}>
       <Flex justifyContent='space-between' alignItems='center'>
         <Heading as='h1' size='3xl' mb='20px' mt='20px'>
-          TODO LIST - 專案列表
+          TODO LIST - 標籤列表
         </Heading>
 
         <Stack direction='row' gap='2'>
-          <Link href='/todo-list/tags'>
-            <Button variant='outline' colorPalette='blue'>
-              <Icon as={FaTags} />
-              標籤管理
-            </Button>
-          </Link>
           <Button colorPalette='blue' onClick={() => setModalOpen(true)}>
             <Icon as={FaPlus} />
-            新增專案
+            新增標籤
           </Button>
+          <Link href='/'>
+            <Button variant='outline' colorPalette='blue'>
+              <Icon as={FaHome} />
+              返回首頁
+            </Button>
+          </Link>
         </Stack>
       </Flex>
 
@@ -107,15 +100,13 @@ export default function Home() {
           <Dialog.Positioner>
             <Dialog.Content as='form' onSubmit={onSubmit}>
               <Dialog.Header>
-                <Dialog.Title>新增專案</Dialog.Title>
+                <Dialog.Title>新增標籤</Dialog.Title>
               </Dialog.Header>
               <FormProvider {...methods}>
                 <Dialog.Body layerStyle='border-solid-top' p='6'>
-                  <LoadingLayout
-                    isLoading={isProjectsPending || isProjectsLoading}
-                  >
+                  <LoadingLayout isLoading={isTagsPending || isTagsLoading}>
                     <VStack gap='4'>
-                      {todoProjectFieldConfig.map((field) => (
+                      {todoTagFieldConfig.map((field) => (
                         <FieldCase key={field.name} field={field} />
                       ))}
                     </VStack>
@@ -141,63 +132,33 @@ export default function Home() {
         </Portal>
       </Dialog.Root>
 
-      <LoadingLayout isLoading={isProjectsPending || isProjectsLoading}>
-        <Grid
-          templateColumns={{
-            base: 'repeat(1, 1fr)',
-            md: 'repeat(2, 1fr)',
-            lg: 'repeat(3, 1fr)',
-          }}
-          gap='20px'
-        >
-          <For each={projects?.results}>
-            {(project) => (
-              <GridItem key={project.id} layerStyle='border-solid-all'>
-                <Heading as='h2' size='2xl' p='4'>
-                  {project.is_public ? (
-                    <Badge
-                      variant='surface'
-                      colorPalette='blue'
-                      size='lg'
-                      mr='10px'
-                    >
-                      <MdOutlinePublic />
-                      公開
-                    </Badge>
-                  ) : (
-                    <Badge
-                      variant='surface'
-                      colorPalette='gray'
-                      size='lg'
-                      mr='10px'
-                    >
-                      <CiLock />
-                      私有
-                    </Badge>
-                  )}
-
-                  {project.name}
-                </Heading>
-
-                <HStack layerStyle='border-solid-top' p='2'>
-                  <Link
-                    href={`/todo-list/project/${project.id}/tasks`}
-                    style={{ flex: 1 }}
-                  >
-                    <Button variant='outline' colorPalette='cyan' w='100%'>
-                      <Icon as={GrView} />
-                      查看任務列表
-                    </Button>
-                  </Link>
-                  <Link href={`/todo-list/project/${project.id}/edit`}>
-                    <Button variant='ghost' colorPalette='blue'>
+      <Table.Root size='sm'>
+        <Table.Header>
+          <Table.Row>
+            <Table.ColumnHeader>標籤名稱</Table.ColumnHeader>
+            <Table.ColumnHeader>新增時間</Table.ColumnHeader>
+            <Table.ColumnHeader w='100px'>操作</Table.ColumnHeader>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {data?.results.map((tag) => (
+            <Table.Row key={tag.id}>
+              <Table.Cell>{tag.name}</Table.Cell>
+              <Table.Cell>
+                {new Date(tag.created_at).toLocaleString()}
+              </Table.Cell>
+              <Table.Cell>
+                <Stack direction='row' gap='2'>
+                  <Link href={`/todo-list/tags/${tag.id}`}>
+                    <Button variant='outline' colorPalette='blue'>
                       <Icon as={FaEdit} />
                       編輯
                     </Button>
                   </Link>
+
                   <Popover.Root>
                     <Popover.Trigger asChild>
-                      <Button variant='ghost' colorPalette='red'>
+                      <Button variant='outline' colorPalette='red'>
                         <Icon as={FaTrash} />
                         刪除
                       </Button>
@@ -217,7 +178,7 @@ export default function Home() {
                               <Button
                                 variant='ghost'
                                 colorPalette='red'
-                                onClick={() => handleDeleteProject(project.id)}
+                                onClick={() => handleDeleteTag(tag.id)}
                               >
                                 確定
                               </Button>
@@ -227,12 +188,14 @@ export default function Home() {
                       </Popover.Positioner>
                     </Portal>
                   </Popover.Root>
-                </HStack>
-              </GridItem>
-            )}
-          </For>
-        </Grid>
-      </LoadingLayout>
-    </>
+                </Stack>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table.Root>
+    </LoadingLayout>
   );
-}
+};
+
+export default TagsPage;
